@@ -18,11 +18,13 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "stdio.h"
+#include "delay.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -54,7 +56,16 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+uint8_t usart_rev_data;//定义一个全局变量  
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)  
+{  
+    if(huart->Instance == USART1)//假如有串口1触发接收中断  
+    {  
+		//直接处理 usart_rev_data 就行了 
+		
+		HAL_UART_Receive_IT(&huart1,&usart_rev_data,1);
+    }  
+}
 /* USER CODE END 0 */
 
 /**
@@ -86,8 +97,13 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
+	delay_init();
+	__HAL_UART_ENABLE_IT(&huart1,UART_IT_RXNE);
+	HAL_UART_Receive_IT(&huart1,&usart_rev_data,1);
+	
+	printf("init finished!\r\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -95,11 +111,11 @@ int main(void)
   while (1)
   {
 	HAL_GPIO_WritePin(LED_GPIO_Port,LED_Pin,GPIO_PIN_RESET);
-	HAL_Delay(1000);
+	delay_ms(1000);
 	HAL_GPIO_WritePin(LED_GPIO_Port,LED_Pin,GPIO_PIN_SET);
-	HAL_Delay(1000);
+	delay_ms(1000);
     /* USER CODE END WHILE */
-		
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

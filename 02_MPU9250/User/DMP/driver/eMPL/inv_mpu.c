@@ -29,7 +29,7 @@
 #include "usart.h"
 
 #define STM32_MPU9250  //开启自定义的函数宏定义
-#define MPU9250        //使用MPU6050相关的处理函数
+#define MPU9250        //使用MPU9250相关的处理函数
 /*********************用户处理部分 end  **********************/
 
 /* The following functions must be defined for this platform:
