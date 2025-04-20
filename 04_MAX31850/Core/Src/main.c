@@ -91,7 +91,8 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-	delay_init();
+	//delay_init();
+	DWT_Delay_Init();
 	max31850_init();
   /* USER CODE END 2 */
 
@@ -102,6 +103,7 @@ int main(void)
 	  // 获得MAX31850读取的温度,这里大概会有1秒
 	  get_max31850_temp_skiprom(&celsius,&fahrenheit);
 	  printf("celsius:%f,fahrenheit:%f\r\n",celsius,fahrenheit);
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

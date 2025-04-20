@@ -4,6 +4,9 @@
 #include "stdio.h"
 
 /***************    用户处理区域    ****************/
+
+#define max31850_delay_ms DWT_Delay_ms
+
 static uint8_t gpio_init(void)
 {
 	return 0;
@@ -83,7 +86,7 @@ int get_max31850_temp(float *celsius,float *fahrenheit)
     if ( !one_wire_search(&max31850,addr,true)) 
 	{
         one_wire_reset_search(&max31850);
-        delay_ms(250);
+        max31850_delay_ms(250);
         return -2;
     }
 
@@ -114,7 +117,7 @@ int get_max31850_temp(float *celsius,float *fahrenheit)
     one_wire_select(&max31850,addr);
     one_wire_write(&max31850,0x44, 1);        // start conversion, with parasite power on at the end
 
-    delay_ms(1000);     // maybe 750ms is enough, maybe not
+    max31850_delay_ms(1000);     // maybe 750ms is enough, maybe not
     // we might do a ds.depower() here, but the reset will take care of it.
 
     present = one_wire_reset(&max31850);
@@ -174,7 +177,7 @@ int get_max31850_temp_skiprom(float *celsius,float *fahrenheit)
     one_wire_skip(&max31850);
     one_wire_write(&max31850,0x44, 1);        // start conversion, with parasite power on at the end
 
-    delay_ms(1000);     // maybe 750ms is enough, maybe not
+    max31850_delay_ms(1000);     // maybe 750ms is enough, maybe not
     // we might do a ds.depower() here, but the reset will take care of it.
 
     present = one_wire_reset(&max31850);

@@ -5,7 +5,7 @@
 
 #define noInterrupts()         __disable_irq();  //失能单片机中断
 #define interrupts()           __enable_irq();   //使能单片机中断
-#define one_wire_delay_us      delay_us
+#define one_wire_delay_us      DWT_Delay_us
 /********************************************/
 
 /**

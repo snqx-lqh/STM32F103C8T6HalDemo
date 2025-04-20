@@ -99,7 +99,7 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-	delay_init();
+	DWT_Delay_Init();
 	__HAL_UART_ENABLE_IT(&huart1,UART_IT_RXNE);
 	HAL_UART_Receive_IT(&huart1,&usart_rev_data,1);
 	
@@ -111,9 +111,9 @@ int main(void)
   while (1)
   {
 	HAL_GPIO_WritePin(LED_GPIO_Port,LED_Pin,GPIO_PIN_RESET);
-	delay_ms(1000);
+	DWT_Delay_ms(1000);
 	HAL_GPIO_WritePin(LED_GPIO_Port,LED_Pin,GPIO_PIN_SET);
-	delay_ms(1000);
+	DWT_Delay_ms(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
