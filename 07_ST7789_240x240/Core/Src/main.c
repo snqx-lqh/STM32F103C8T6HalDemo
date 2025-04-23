@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "spi.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -25,7 +26,8 @@
 /* USER CODE BEGIN Includes */
 #include "stdio.h"
 #include "delay.h"
-#include "ds18b20.h"
+#include "st7789.h"
+#include "pic.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -57,8 +59,16 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-float celsius,fahrenheit;
-int   ret;
+uint8_t usart_rev_data;//定义一个全局变量  
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)  
+{  
+    if(huart->Instance == USART1)//假如有串口1触发接收中断  
+    {  
+		//直接处理 usart_rev_data 就行了 
+		
+		HAL_UART_Receive_IT(&huart1,&usart_rev_data,1);
+    }  
+}
 /* USER CODE END 0 */
 
 /**
@@ -69,7 +79,8 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-	
+	uint8_t i,j;
+	float t=0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -91,19 +102,36 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART1_UART_Init();
+  MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
-	//delay_init();
 	DWT_Delay_Init();
-	ds18b20_init();
+	__HAL_UART_ENABLE_IT(&huart1,UART_IT_RXNE);
+	HAL_UART_Receive_IT(&huart1,&usart_rev_data,1);
+	LCD_Init( );
+	LCD_Fill(0,0,LCD_W,LCD_H,WHITE);
+	printf("init finished!\r\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  // 获得ds18b20读取的温度,这里大概会有1秒
-	  ret = get_ds18b20_temp_skiprom(&celsius,&fahrenheit);
-	  printf("celsius:%f,fahrenheit:%f\r\n",celsius,fahrenheit);
+		LCD_ShowChinese(0,0,"中景园电子",RED,WHITE,32,0);
+		LCD_ShowString(0,40,"LCD_W:",RED,WHITE,16,0);
+		LCD_ShowIntNum(48,40,LCD_W,3,RED,WHITE,16);
+		LCD_ShowString(80,40,"LCD_H:",RED,WHITE,16,0);
+		LCD_ShowIntNum(128,40,LCD_H,3,RED,WHITE,16);
+		LCD_ShowString(80,40,"LCD_H:",RED,WHITE,16,0);
+		LCD_ShowString(0,70,"Increaseing Nun:",RED,WHITE,16,0);
+		LCD_ShowFloatNum1(128,70,t,4,RED,WHITE,16);
+		t+=0.11;
+		for(j=0;j<3;j++)
+		{
+			for(i=0;i<6;i++)
+			{
+				LCD_ShowPicture(40*i,120+j*40,40,40,gImage_1);
+			}
+		}
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

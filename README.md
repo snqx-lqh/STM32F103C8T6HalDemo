@@ -17,6 +17,14 @@
 
 04_MAX31850：移植arduino的OneWire库，实现单总线协议的读取PT100测量芯片的值。
 
+​							移植讲解的博客：https://blog.csdn.net/wan1234512/article/details/147401806
+
 05_PCF8591：使用AD/DA芯片，该芯片使用的是IIC控制芯片读取ADC和DA输出。
 
 06_DS18B20：移植arduino的OneWire库，实现单总线协议的读取DS18B20测量芯片的值。
+
+​						  移植讲解的博客：https://blog.csdn.net/wan1234512/article/details/147401806
+
+07_ST7789_240x240：移植中景元电子的库，增加HAL库软件SPI和硬件SPI的使用方式。
+
+​						  移植讲解的博客：https://blog.csdn.net/wan1234512/article/details/147461868
